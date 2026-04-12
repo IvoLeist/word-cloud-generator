@@ -108,13 +108,8 @@ export default function PreviewPanel({
       {activeWord && (
         <div className="word-editor">
           <div className="word-editor-header">
-            <strong>{activeWord.text}</strong>
             <span className="word-editor-label">Ändere Text und Farbe</span>
           </div>
-
-          <label htmlFor="word-text-input" className="word-editor-input-label">
-            Text
-          </label>
           <input
             id="word-text-input"
             className="word-editor-text-input"
