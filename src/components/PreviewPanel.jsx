@@ -58,13 +58,19 @@ export default function PreviewPanel({
   return (
     <Card
       elevation={0}
-      sx={{
+      sx={(theme) => ({
         borderRadius: 4,
         border: "1px solid",
         borderColor: "divider",
-        backgroundColor: "rgba(255,255,255,0.9)",
-        boxShadow: "0 18px 50px rgba(31, 41, 55, 0.09)",
-      }}
+        backgroundColor:
+          theme.palette.mode === "light"
+            ? "rgba(255,255,255,0.9)"
+            : "rgba(17,24,39,0.9)",
+        boxShadow:
+          theme.palette.mode === "light"
+            ? "0 18px 50px rgba(31, 41, 55, 0.09)"
+            : "0 18px 50px rgba(2, 6, 23, 0.45)",
+      })}
     >
       <CardContent sx={{ p: { xs: 2, md: 3 }, "&:last-child": { pb: { xs: 2, md: 3 } } }}>
         <Stack spacing={2}>
@@ -94,7 +100,7 @@ export default function PreviewPanel({
           </Stack>
 
           <Box
-            sx={{
+            sx={(theme) => ({
               position: "relative",
               overflow: "auto",
               borderRadius: 3,
@@ -103,21 +109,26 @@ export default function PreviewPanel({
               p: 2,
               maxHeight: "calc(100vh - 270px)",
               background:
-                "linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), linear-gradient(90deg, rgba(148,163,184,0.15) 1px, transparent 1px), linear-gradient(rgba(148,163,184,0.15) 1px, transparent 1px)",
+                theme.palette.mode === "light"
+                  ? "linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), linear-gradient(90deg, rgba(148,163,184,0.15) 1px, transparent 1px), linear-gradient(rgba(148,163,184,0.15) 1px, transparent 1px)"
+                  : "linear-gradient(rgba(15,23,42,0.88), rgba(15,23,42,0.88)), linear-gradient(90deg, rgba(148,163,184,0.12) 1px, transparent 1px), linear-gradient(rgba(148,163,184,0.12) 1px, transparent 1px)",
               backgroundSize: "auto, 28px 28px, 28px 28px",
-            }}
+            })}
           >
             <Box
               ref={stageRef}
-              sx={{
+              sx={(theme) => ({
                 position: "relative",
                 width: canvasWidth,
                 height: canvasHeight,
                 mx: "auto",
                 borderRadius: 3,
                 background,
-                boxShadow: "0 24px 45px rgba(15,23,42,0.16)",
-              }}
+                boxShadow:
+                  theme.palette.mode === "light"
+                    ? "0 24px 45px rgba(15,23,42,0.16)"
+                    : "0 24px 45px rgba(2,6,23,0.55)",
+              })}
             >
               <input
                 ref={colorInputRef}
@@ -147,7 +158,7 @@ export default function PreviewPanel({
                     }
                   }}
                   aria-label={`Text und Farbe fuer ${placement.text} aendern`}
-                  sx={{
+                  sx={(theme) => ({
                     position: "absolute",
                     left: placement.x,
                     top: placement.y,
@@ -165,10 +176,12 @@ export default function PreviewPanel({
                     "&:hover, &:focus-visible": {
                       transform: "translateY(-1px)",
                       boxShadow:
-                        "0 0 0 3px rgba(255,255,255,0.9), 0 0 0 5px rgba(11,92,171,0.35)",
+                        theme.palette.mode === "light"
+                          ? "0 0 0 3px rgba(255,255,255,0.9), 0 0 0 5px rgba(11,92,171,0.35)"
+                          : "0 0 0 3px rgba(15,23,42,0.92), 0 0 0 5px rgba(96,165,250,0.4)",
                       outline: "none",
                     },
-                  }}
+                  })}
                 >
                   {placement.text}
                 </Box>

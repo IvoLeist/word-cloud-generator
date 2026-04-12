@@ -73,14 +73,20 @@ export default function SettingsPanel({
     <Stack
       component="section"
       spacing={2.5}
-      sx={{
+      sx={(theme) => ({
         p: { xs: 2, md: 3 },
         borderRadius: 4,
         border: "1px solid",
         borderColor: "divider",
-        backgroundColor: "rgba(255,255,255,0.9)",
-        boxShadow: "0 18px 50px rgba(31, 41, 55, 0.09)",
-      }}
+        backgroundColor:
+          theme.palette.mode === "light"
+            ? "rgba(255,255,255,0.9)"
+            : "rgba(17,24,39,0.9)",
+        boxShadow:
+          theme.palette.mode === "light"
+            ? "0 18px 50px rgba(31, 41, 55, 0.09)"
+            : "0 18px 50px rgba(2, 6, 23, 0.45)",
+      })}
     >
       <Typography variant="h5" sx={{ fontWeight: 700 }}>
         Einstellungen
@@ -155,13 +161,14 @@ export default function SettingsPanel({
       <Accordion
         disableGutters
         defaultExpanded={Boolean(customColorsText.trim()) || invalidColorEntries.length > 0}
-        sx={{
+        sx={(theme) => ({
           borderRadius: 3,
           border: "1px solid",
           borderColor: "divider",
+          backgroundColor: theme.palette.background.paper,
           "&:before": { display: "none" },
           overflow: "hidden",
-        }}
+        })}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Stack direction="row" spacing={1.5} alignItems="center">
@@ -176,7 +183,7 @@ export default function SettingsPanel({
             </Typography>
 
             <Box
-              sx={{
+              sx={(theme) => ({
                 display: "flex",
                 flexWrap: "wrap",
                 gap: 1,
@@ -186,7 +193,8 @@ export default function SettingsPanel({
                 borderRadius: 2,
                 minHeight: 56,
                 alignItems: "center",
-              }}
+                backgroundColor: theme.palette.background.default,
+              })}
             >
               {customColorTokens.map((token, index) => (
                 <Chip
