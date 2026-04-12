@@ -89,10 +89,18 @@ export default function SettingsPanel({
       <TextField
         label="Wörter / Sätze"
         multiline
-        minRows={10}
+        rows={10}
         value={inputText}
         onChange={(event) => onInputTextChange(event.target.value)}
         placeholder="Wörter oder Sätze hier eingeben, z. B. durch Zeilenumbruch, Komma oder Semikolon getrennt (je nach Einstellung)"
+        sx={{
+          "& .MuiInputBase-root": {
+            alignItems: "flex-start",
+          },
+          "& .MuiInputBase-inputMultiline": {
+            overflowY: "auto !important",
+          },
+        }}
       />
 
       <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
@@ -233,7 +241,7 @@ export default function SettingsPanel({
             </Stack>
 
             <Typography variant="body2" color="text.secondary">
-              Unterstuetzt Farbwerte als englische oder deutsche Namen sowie Hex- und RGB-Codes.
+              Trage Farben in Englisch, Deutsch oder als Hex-/RGB-Codes ein.
             </Typography>
 
             {invalidColorEntries.length > 0 && (
