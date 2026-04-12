@@ -22,7 +22,6 @@ export default function PreviewPanel({
       color: placement.color,
       text: placement.text,
     });
-    colorInputRef.current?.click();
   };
 
   const handleColorChange = (event) => {
@@ -44,7 +43,7 @@ export default function PreviewPanel({
       <div className="preview-header">
         <div>
           <h2>Vorschau und Download</h2>
-          <p>Wort anklicken, um seine Farbe aus der aktiven Palette oder manuell zu ändern.</p>
+          <p>Klicke auf ein Wort, um dessen Farbe zu ändern.</p>
         </div>
         <div className="row-wrap">
           <button type="button" onClick={() => onDownloadImage("png")}>
@@ -125,7 +124,7 @@ export default function PreviewPanel({
               className="secondary"
               onClick={() => colorInputRef.current?.click()}
             >
-              Eigene Farbe whälen
+              Eigene Farbe waehlen
             </button>
           </div>
         </div>
