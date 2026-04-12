@@ -109,7 +109,7 @@ export default function PreviewPanel({
         <div className="word-editor">
           <div className="word-editor-header">
             <strong>{activeWord.text}</strong>
-            <span className="word-editor-label">Text und Farbe</span>
+            <span className="word-editor-label">Ändere Text und Farbe</span>
           </div>
 
           <label htmlFor="word-text-input" className="word-editor-input-label">
@@ -143,7 +143,7 @@ export default function PreviewPanel({
               className="secondary"
               onClick={() => colorInputRef.current?.click()}
             >
-              Eigene Farbe waehlen
+              Eigene Farbe wählen
             </button>
           </div>
         </div>

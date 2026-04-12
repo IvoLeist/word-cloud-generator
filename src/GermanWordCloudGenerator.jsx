@@ -46,8 +46,13 @@ export default function GermanWordCloudGenerator() {
   const maxColorCount = availablePalette.length;
 
   useEffect(() => {
+    if (customColorResult.colors.length > 0) {
+      setColorCount(customColorResult.colors.length);
+      return;
+    }
+
     setColorCount((current) => Math.max(1, Math.min(current, maxColorCount)));
-  }, [maxColorCount]);
+  }, [customColorResult.colors.length, maxColorCount]);
 
   const selectedColors = useMemo(
     () => selectColors(availablePalette, colorCount),
