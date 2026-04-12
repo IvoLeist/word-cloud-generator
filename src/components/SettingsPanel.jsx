@@ -87,12 +87,12 @@ export default function SettingsPanel({
       </Typography>
 
       <TextField
-        label="Woerter / Saetze"
+        label="Wörter / Sätze"
         multiline
         minRows={10}
         value={inputText}
         onChange={(event) => onInputTextChange(event.target.value)}
-        placeholder="Eintraege mit der gewaehlten Trennung eingeben"
+        placeholder="Wörter oder Sätze hier eingeben, z. B. durch Zeilenumbruch, Komma oder Semikolon getrennt (je nach Einstellung)"
       />
 
       <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
@@ -122,7 +122,6 @@ export default function SettingsPanel({
       {error && <Alert severity="error">{error}</Alert>}
 
       <FormControl fullWidth>
-        <InputLabel id="split-mode-label">Trennung</InputLabel>
         <TextField
           select
           labelId="split-mode-label"
@@ -249,7 +248,7 @@ export default function SettingsPanel({
 
       <SliderField
         id="font-size"
-        label="Schriftgroesse"
+        label="Schriftgröße"
         min={8}
         max={96}
         value={fontSize}
@@ -259,7 +258,7 @@ export default function SettingsPanel({
 
       <SliderField
         id="gap"
-        label="Abstand zwischen Woertern"
+        label="Abstand zwischen Wörtern"
         min={0}
         max={40}
         value={gap}
@@ -277,7 +276,7 @@ export default function SettingsPanel({
         />
         <TextField
           fullWidth
-          label="Hoehe"
+          label="Höhe"
           type="number"
           value={canvasHeight}
           onChange={(event) => onCanvasHeightChange(event.target.value)}

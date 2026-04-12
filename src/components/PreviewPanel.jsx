@@ -181,7 +181,7 @@ export default function PreviewPanel({
               <CardContent sx={{ "&:last-child": { pb: 2 } }}>
                 <Stack spacing={2}>
                   <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-                    Aendere Text und Farbe
+                    Ändere Text und Farbe
                   </Typography>
 
                   <TextField label="Text" value={activeWord.text} onChange={handleTextChange} />
@@ -214,7 +214,7 @@ export default function PreviewPanel({
 
                   <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
                     <Button variant="outlined" onClick={() => colorInputRef.current?.click()}>
-                      Eigene Farbe waehlen
+                      Eigene Farbe wählen
                     </Button>
                   </Stack>
                 </Stack>

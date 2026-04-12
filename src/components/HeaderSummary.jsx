@@ -36,14 +36,10 @@ export default function HeaderSummary({ wordCount, canvasWidth, canvasHeight }) 
         <Typography variant="h2" sx={{ fontSize: { xs: "2.5rem", md: "3.5rem" }, fontWeight: 800 }}>
           German Word Cloud Generator
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 720 }}>
-          Wortwolken bauen, Farben kuratieren und einzelne Eintraege direkt in der Vorschau
-          bearbeiten.
-        </Typography>
       </Stack>
 
       <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ minWidth: { lg: 360 } }}>
-        <SummaryCard label="Woerter oder Saetze" value={wordCount} />
+        <SummaryCard label="Wörter oder Sätze" value={wordCount} />
         <SummaryCard label="Format" value={`${canvasWidth} x ${canvasHeight}`} />
       </Stack>
     </Stack>
