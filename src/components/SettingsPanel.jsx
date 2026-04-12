@@ -133,8 +133,8 @@ export default function SettingsPanel({
       <SliderField
         id="font-size"
         label="Schriftgröße"
-        min={20}
-        max={80}
+        min={8}
+        max={96}
         value={fontSize}
         suffix="px"
         onChange={onFontSizeChange}
