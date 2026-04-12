@@ -1,3 +1,4 @@
+import { Slider, Stack, TextField, Typography } from "@mui/material";
 import { clamp } from "../utils/number";
 
 export default function SliderField({
@@ -17,31 +18,30 @@ export default function SliderField({
   };
 
   return (
-    <div className="slider-field">
-      <label htmlFor={id}>
+    <Stack spacing={1.5}>
+      <Typography component="label" htmlFor={id} variant="subtitle2" sx={{ fontWeight: 700 }}>
         {label}: {value}
         {suffix}
-      </label>
-      <div className="slider-input-row">
-        <input
+      </Typography>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
+        <Slider
           id={id}
-          type="range"
           min={min}
           max={max}
           step={step}
           value={value}
-          onChange={(event) => handleChange(event.target.value)}
+          onChange={(_, nextValue) => handleChange(nextValue)}
+          sx={{ flex: 1 }}
         />
-        <input
-          aria-label={`${label} direkt eingeben`}
+        <TextField
+          size="small"
           type="number"
-          min={min}
-          max={max}
-          step={step}
+          inputProps={{ min, max, step }}
           value={value}
           onChange={(event) => handleChange(event.target.value)}
+          sx={{ width: { xs: "100%", sm: 96 } }}
         />
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   );
 }

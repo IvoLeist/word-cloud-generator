@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Box, Container, Stack } from "@mui/material";
 import HeaderSummary from "./components/HeaderSummary";
 import PreviewPanel from "./components/PreviewPanel";
 import SettingsPanel from "./components/SettingsPanel";
@@ -155,59 +156,70 @@ export default function GermanWordCloudGenerator() {
   };
 
   return (
-    <div className="app-shell">
-      <HeaderSummary
-        wordCount={words.length}
-        canvasWidth={canvasWidth}
-        canvasHeight={canvasHeight}
-      />
-
-      <div className="layout-grid">
-        <SettingsPanel
-          inputText={inputText}
-          onInputTextChange={setInputText}
-          fileInputRef={fileInputRef}
-          onUpload={handleUpload}
-          onRegenerate={regenerate}
-          error={error}
-          colorCount={colorCount}
-          onColorCountChange={setColorCount}
-          maxColorCount={maxColorCount}
-          fontSize={fontSize}
-          onFontSizeChange={setFontSize}
-          gap={gap}
-          onGapChange={setGap}
-          canvasWidth={canvasWidth}
-          onCanvasWidthChange={handleCanvasWidthChange}
-          canvasHeight={canvasHeight}
-          onCanvasHeightChange={handleCanvasHeightChange}
-          background={background}
-          onBackgroundChange={setBackground}
-          splitMode={splitMode}
-          onSplitModeChange={setSplitMode}
-          customColorsText={customColorsText}
-          onCustomColorsTextChange={setCustomColorsText}
-          colorFileInputRef={colorFileInputRef}
-          onColorUpload={handleColorUpload}
-          customColorCount={customColorResult.colors.length}
-          invalidColorEntries={customColorResult.invalidEntries}
-        />
-
-        <PreviewPanel
-          stageRef={stageRef}
-          canvasWidth={canvasWidth}
-          canvasHeight={canvasHeight}
-          background={background}
-          placements={displayedPlacements}
-          availableColors={availablePalette}
-          fontSize={fontSize}
-          selectedColors={selectedColors}
+    <Container maxWidth={false} sx={{ maxWidth: 1640, py: { xs: 2, md: 4 } }}>
+      <Stack spacing={3.5}>
+        <HeaderSummary
           wordCount={words.length}
-          onDownloadImage={downloadImage}
-          onWordColorChange={handleWordColorChange}
-          onWordTextChange={handleWordTextChange}
+          canvasWidth={canvasWidth}
+          canvasHeight={canvasHeight}
         />
-      </div>
-    </div>
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", xl: "420px minmax(0, 1fr)" },
+            gap: 3.5,
+            alignItems: "start",
+          }}
+        >
+          <Box sx={{ position: { xl: "sticky" }, top: { xl: 20 } }}>
+            <SettingsPanel
+              inputText={inputText}
+              onInputTextChange={setInputText}
+              fileInputRef={fileInputRef}
+              onUpload={handleUpload}
+              onRegenerate={regenerate}
+              error={error}
+              colorCount={colorCount}
+              onColorCountChange={setColorCount}
+              maxColorCount={maxColorCount}
+              fontSize={fontSize}
+              onFontSizeChange={setFontSize}
+              gap={gap}
+              onGapChange={setGap}
+              canvasWidth={canvasWidth}
+              onCanvasWidthChange={handleCanvasWidthChange}
+              canvasHeight={canvasHeight}
+              onCanvasHeightChange={handleCanvasHeightChange}
+              background={background}
+              onBackgroundChange={setBackground}
+              splitMode={splitMode}
+              onSplitModeChange={setSplitMode}
+              customColorsText={customColorsText}
+              onCustomColorsTextChange={setCustomColorsText}
+              colorFileInputRef={colorFileInputRef}
+              onColorUpload={handleColorUpload}
+              customColorCount={customColorResult.colors.length}
+              invalidColorEntries={customColorResult.invalidEntries}
+            />
+          </Box>
+
+          <PreviewPanel
+            stageRef={stageRef}
+            canvasWidth={canvasWidth}
+            canvasHeight={canvasHeight}
+            background={background}
+            placements={displayedPlacements}
+            availableColors={availablePalette}
+            fontSize={fontSize}
+            selectedColors={selectedColors}
+            wordCount={words.length}
+            onDownloadImage={downloadImage}
+            onWordColorChange={handleWordColorChange}
+            onWordTextChange={handleWordTextChange}
+          />
+        </Box>
+      </Stack>
+    </Container>
   );
 }

@@ -1,6 +1,25 @@
 import { useMemo, useState } from "react";
-import { splitColorList } from "../utils/colorPalette";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Alert,
+  Box,
+  Button,
+  Chip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
+import PaletteIcon from "@mui/icons-material/Palette";
 import SliderField from "./SliderField";
+import { splitColorList } from "../utils/colorPalette";
 
 export default function SettingsPanel({
   inputText,
@@ -28,7 +47,6 @@ export default function SettingsPanel({
   onCustomColorsTextChange,
   colorFileInputRef,
   onColorUpload,
-  customColorCount,
   invalidColorEntries,
 }) {
   const [colorDraft, setColorDraft] = useState("");
@@ -41,8 +59,7 @@ export default function SettingsPanel({
       return;
     }
 
-    const nextTokens = [...customColorTokens, ...draftTokens];
-    onCustomColorsTextChange(nextTokens.join("\n"));
+    onCustomColorsTextChange([...customColorTokens, ...draftTokens].join("\n"));
     setColorDraft("");
   };
 
@@ -53,21 +70,39 @@ export default function SettingsPanel({
   };
 
   return (
-    <section className="panel">
-      <h2>Einstellungen</h2>
+    <Stack
+      component="section"
+      spacing={2.5}
+      sx={{
+        p: { xs: 2, md: 3 },
+        borderRadius: 4,
+        border: "1px solid",
+        borderColor: "divider",
+        backgroundColor: "rgba(255,255,255,0.9)",
+        boxShadow: "0 18px 50px rgba(31, 41, 55, 0.09)",
+      }}
+    >
+      <Typography variant="h5" sx={{ fontWeight: 700 }}>
+        Einstellungen
+      </Typography>
 
-      <label>Wörter / Sätze</label>
-      <textarea
-        className="text-input"
+      <TextField
+        label="Woerter / Saetze"
+        multiline
+        minRows={10}
         value={inputText}
         onChange={(event) => onInputTextChange(event.target.value)}
-        placeholder="Einträge mit der gewählten Trennung eingeben"
+        placeholder="Eintraege mit der gewaehlten Trennung eingeben"
       />
 
-      <div className="row-wrap">
-        <button type="button" onClick={() => fileInputRef.current?.click()}>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+        <Button
+          variant="contained"
+          startIcon={<UploadFileIcon />}
+          onClick={() => fileInputRef.current?.click()}
+        >
           Datei hochladen
-        </button>
+        </Button>
         <input
           ref={fileInputRef}
           type="file"
@@ -75,27 +110,31 @@ export default function SettingsPanel({
           style={{ display: "none" }}
           onChange={onUpload}
         />
-        <button type="button" className="secondary" onClick={onRegenerate}>
+        <Button variant="outlined" startIcon={<AutorenewIcon />} onClick={onRegenerate}>
           Generiere neu
-        </button>
-      </div>
+        </Button>
+      </Stack>
 
-      <small>
-        Unterstützt: .txt und .docx.
-      </small>
+      <Typography variant="body2" color="text.secondary">
+        Unterstuetzt: .txt und .docx.
+      </Typography>
 
-      {error && <div className="error-box">{error}</div>}
+      {error && <Alert severity="error">{error}</Alert>}
 
-      <label htmlFor="split-mode">Trennung</label>
-      <select
-        id="split-mode"
-        value={splitMode}
-        onChange={(event) => onSplitModeChange(event.target.value)}
-      >
-        <option value="lines">Zeilen</option>
-        <option value="comma">Komma</option>
-        <option value="semicolon">Semikolon</option>
-      </select>
+      <FormControl fullWidth>
+        <InputLabel id="split-mode-label">Trennung</InputLabel>
+        <TextField
+          select
+          labelId="split-mode-label"
+          label="Trennung"
+          value={splitMode}
+          onChange={(event) => onSplitModeChange(event.target.value)}
+        >
+          <MenuItem value="lines">Zeilen</MenuItem>
+          <MenuItem value="comma">Komma</MenuItem>
+          <MenuItem value="semicolon">Semikolon</MenuItem>
+        </TextField>
+      </FormControl>
 
       <SliderField
         id="color-count"
@@ -106,34 +145,53 @@ export default function SettingsPanel({
         onChange={onColorCountChange}
       />
 
-      <details
-        className="collapsible-panel"
-        open={Boolean(customColorsText.trim()) || invalidColorEntries.length > 0}
+      <Accordion
+        disableGutters
+        defaultExpanded={Boolean(customColorsText.trim()) || invalidColorEntries.length > 0}
+        sx={{
+          borderRadius: 3,
+          border: "1px solid",
+          borderColor: "divider",
+          "&:before": { display: "none" },
+          overflow: "hidden",
+        }}
       >
-        <summary className="collapsible-summary">
-          <span>Eigene Farben</span>
-        </summary>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <PaletteIcon color="primary" fontSize="small" />
+            <Typography sx={{ fontWeight: 700 }}>Eigene Farben</Typography>
+          </Stack>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Stack spacing={2}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+              Eigene Farben
+            </Typography>
 
-        <div className="collapsible-content">
-          <label htmlFor="custom-color-draft">Eigene Farben</label>
-          <div className="pill-input-shell">
-            <div className="pill-list" aria-label="Eigene Farben Liste">
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 1,
+                p: 1.5,
+                border: "1px solid",
+                borderColor: "divider",
+                borderRadius: 2,
+                minHeight: 56,
+                alignItems: "center",
+              }}
+            >
               {customColorTokens.map((token, index) => (
-                <span key={`${token}-${index}`} className="pill-chip">
-                  <span className="pill-chip-label">{token}</span>
-                  <button
-                    type="button"
-                    className="pill-chip-remove"
-                    onClick={() => removeColorToken(index)}
-                    aria-label={`${token} entfernen`}
-                  >
-                    ×
-                  </button>
-                </span>
+                <Chip
+                  key={`${token}-${index}`}
+                  label={token}
+                  onDelete={() => removeColorToken(index)}
+                  color="primary"
+                  variant="outlined"
+                />
               ))}
-              <input
-                id="custom-color-draft"
-                className="pill-input"
+              <TextField
+                variant="standard"
                 value={colorDraft}
                 onChange={(event) => setColorDraft(event.target.value)}
                 onBlur={commitColorDraft}
@@ -153,43 +211,45 @@ export default function SettingsPanel({
                     ? "Weitere Farbe eingeben"
                     : "z. B. rot, blue, #ff6600, rgb(34, 139, 34)"
                 }
+                InputProps={{ disableUnderline: true }}
+                sx={{ flex: 1, minWidth: 180 }}
               />
-            </div>
-          </div>
+            </Box>
 
-          <div className="row-wrap">
-            <button
-              type="button"
-              className="secondary"
-              onClick={() => colorFileInputRef.current?.click()}
-            >
-              Farben hochladen
-            </button>
-            <input
-              ref={colorFileInputRef}
-              type="file"
-              accept=".txt,.docx,.doc"
-              style={{ display: "none" }}
-              onChange={onColorUpload}
-            />
-          </div>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+              <Button
+                variant="outlined"
+                startIcon={<UploadFileIcon />}
+                onClick={() => colorFileInputRef.current?.click()}
+              >
+                Farben hochladen
+              </Button>
+              <input
+                ref={colorFileInputRef}
+                type="file"
+                accept=".txt,.docx,.doc"
+                style={{ display: "none" }}
+                onChange={onColorUpload}
+              />
+            </Stack>
 
-          <small>
-            Unterstützt Farbwerte als englische oder deutsche Namen sowie Hex- und RGB-Codes.
-          </small>
+            <Typography variant="body2" color="text.secondary">
+              Unterstuetzt Farbwerte als englische oder deutsche Namen sowie Hex- und RGB-Codes.
+            </Typography>
 
-          {invalidColorEntries.length > 0 && (
-            <div className="error-box">
-              Nicht erkannt: {invalidColorEntries.slice(0, 6).join(", ")}
-              {invalidColorEntries.length > 6 ? " ..." : ""}
-            </div>
-          )}
-        </div>
-      </details>
+            {invalidColorEntries.length > 0 && (
+              <Alert severity="warning">
+                Nicht erkannt: {invalidColorEntries.slice(0, 6).join(", ")}
+                {invalidColorEntries.length > 6 ? " ..." : ""}
+              </Alert>
+            )}
+          </Stack>
+        </AccordionDetails>
+      </Accordion>
 
       <SliderField
         id="font-size"
-        label="Schriftgröße"
+        label="Schriftgroesse"
         min={8}
         max={96}
         value={fontSize}
@@ -199,7 +259,7 @@ export default function SettingsPanel({
 
       <SliderField
         id="gap"
-        label="Abstand zwischen Wörtern"
+        label="Abstand zwischen Woertern"
         min={0}
         max={40}
         value={gap}
@@ -207,34 +267,31 @@ export default function SettingsPanel({
         onChange={onGapChange}
       />
 
-      <div className="size-grid">
-        <div>
-          <label htmlFor="width">Breite</label>
-          <input
-            id="width"
-            type="number"
-            value={canvasWidth}
-            onChange={(event) => onCanvasWidthChange(event.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="height">Höhe</label>
-          <input
-            id="height"
-            type="number"
-            value={canvasHeight}
-            onChange={(event) => onCanvasHeightChange(event.target.value)}
-          />
-        </div>
-      </div>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+        <TextField
+          fullWidth
+          label="Breite"
+          type="number"
+          value={canvasWidth}
+          onChange={(event) => onCanvasWidthChange(event.target.value)}
+        />
+        <TextField
+          fullWidth
+          label="Hoehe"
+          type="number"
+          value={canvasHeight}
+          onChange={(event) => onCanvasHeightChange(event.target.value)}
+        />
+      </Stack>
 
-      <label htmlFor="background">Hintergrundfarbe</label>
-      <input
-        id="background"
+      <TextField
+        label="Hintergrundfarbe"
         type="color"
         value={background}
         onChange={(event) => onBackgroundChange(event.target.value)}
+        InputLabelProps={{ shrink: true }}
+        sx={{ maxWidth: 200 }}
       />
-    </section>
+    </Stack>
   );
 }
