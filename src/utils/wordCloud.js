@@ -66,11 +66,35 @@ export function selectColors(baseColors, colorCount) {
   return baseColors.slice(0, Math.max(2, Math.min(colorCount, baseColors.length)));
 }
 
+function pickBalancedColor(colors, forbidden, colorUsage, rng) {
+  const allowedColors = colors.filter((color) => !forbidden.has(color));
+  const candidateColors = allowedColors.length ? allowedColors : colors;
+  let lowestUsage = Infinity;
+  let leastUsedColors = [];
+
+  for (const color of candidateColors) {
+    const usage = colorUsage.get(color) ?? 0;
+
+    if (usage < lowestUsage) {
+      lowestUsage = usage;
+      leastUsedColors = [color];
+      continue;
+    }
+
+    if (usage === lowestUsage) {
+      leastUsedColors.push(color);
+    }
+  }
+
+  return leastUsedColors[Math.floor(rng() * leastUsedColors.length)];
+}
+
 export function placeWords({ words, width, height, fontSize, gap, colors, seed }) {
   const rng = mulberry32(seed);
   const centerX = width / 2;
   const centerY = height / 2;
   const placed = [];
+  const colorUsage = new Map(colors.map((color) => [color, 0]));
 
   for (const word of words) {
     const w = estimateTextWidth(word.text, fontSize);
@@ -107,8 +131,7 @@ export function placeWords({ words, width, height, fontSize, gap, colors, seed }
 
       if (collision) continue;
 
-      let color = colors.find((candidate) => !forbidden.has(candidate));
-      if (!color) color = colors[Math.floor(rng() * colors.length)];
+      const color = pickBalancedColor(colors, forbidden, colorUsage, rng);
 
       best = {
         ...rect,
@@ -118,17 +141,20 @@ export function placeWords({ words, width, height, fontSize, gap, colors, seed }
     }
 
     if (!best) {
+      const color = pickBalancedColor(colors, new Set(), colorUsage, rng);
+
       best = {
         x: 20 + rng() * Math.max(20, width - w - 40),
         y: 20 + rng() * Math.max(20, height - h - 40),
         w,
         h,
         text: word.text,
-        color: colors[Math.floor(rng() * colors.length)],
+        color,
       };
     }
 
     placed.push(best);
+    colorUsage.set(best.color, (colorUsage.get(best.color) ?? 0) + 1);
   }
 
   return placed;
