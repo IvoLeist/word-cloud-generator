@@ -13,8 +13,7 @@ export default function PreviewPanel({
     <section className="panel">
       <div className="preview-header">
         <div>
-          <h2>Vorschau</h2>
-          <p>Benachbarte Wörter bekommen nach Möglichkeit unterschiedliche Farben.</p>
+          <h2>Vorschau und Download</h2>
         </div>
         <div className="row-wrap">
           <button type="button" onClick={() => onDownloadImage("png")}>

@@ -143,6 +143,7 @@ small {
 
 .text-input,
 input[type="number"],
+select,
 input[type="color"] {
   width: 100%;
   border: 1px solid #c7d2e0;
@@ -156,6 +157,7 @@ input[type="color"] {
 
 .text-input:focus,
 input[type="number"]:focus,
+select:focus,
 input[type="color"]:focus,
 input[type="range"]:focus,
 button:focus {
@@ -164,6 +166,7 @@ button:focus {
 
 .text-input:focus,
 input[type="number"]:focus,
+select:focus,
 input[type="color"]:focus {
   border-color: #60a5fa;
   box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.16);

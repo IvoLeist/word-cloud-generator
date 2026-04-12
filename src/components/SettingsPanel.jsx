@@ -19,8 +19,8 @@ export default function SettingsPanel({
   onCanvasHeightChange,
   background,
   onBackgroundChange,
-  splitByLineOnly,
-  onSplitByLineOnlyChange,
+  splitMode,
+  onSplitModeChange,
 }) {
   return (
     <section className="panel">
@@ -31,7 +31,7 @@ export default function SettingsPanel({
         className="text-input"
         value={inputText}
         onChange={(event) => onInputTextChange(event.target.value)}
-        placeholder="Ein Eintrag pro Zeile"
+        placeholder="Einträge mit der gewählten Trennung eingeben"
       />
 
       <div className="row-wrap">
@@ -51,11 +51,21 @@ export default function SettingsPanel({
       </div>
 
       <small>
-        Browserbasiert unterstützt: .txt und .docx. Klassisches .doc wird abgefangen und mit
-        Hinweis gemeldet.
+        Unterstützt: .txt und .docx.
       </small>
 
       {error && <div className="error-box">{error}</div>}
+
+      <label htmlFor="split-mode">Trennung</label>
+      <select
+        id="split-mode"
+        value={splitMode}
+        onChange={(event) => onSplitModeChange(event.target.value)}
+      >
+        <option value="lines">Zeilen</option>
+        <option value="comma">Komma</option>
+        <option value="semicolon">Semikolon</option>
+      </select>
 
       <SliderField
         id="color-count"
@@ -114,16 +124,6 @@ export default function SettingsPanel({
         value={background}
         onChange={(event) => onBackgroundChange(event.target.value)}
       />
-
-      <label className="checkbox-row" htmlFor="split-lines-only">
-        <input
-          id="split-lines-only"
-          type="checkbox"
-          checked={splitByLineOnly}
-          onChange={(event) => onSplitByLineOnlyChange(event.target.checked)}
-        />
-        Nur Zeilen als Trennung (aus: Zeilenumbrüche und Semikolon)
-      </label>
     </section>
   );
 }

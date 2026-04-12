@@ -42,18 +42,19 @@ function touches(a, b, gap) {
   );
 }
 
-export function parseInput(text, splitByLineOnly) {
+export function parseInput(text, splitMode) {
   if (!text.trim()) return [];
 
-  const items = splitByLineOnly
-    ? text
-        .split(/\r?\n/)
-        .map((entry) => entry.trim())
-        .filter(Boolean)
-    : text
-        .split(/\r?\n|;/)
-        .map((entry) => entry.trim())
-        .filter(Boolean);
+  const separators = {
+    lines: /\r?\n/,
+    comma: /,/,
+    semicolon: /;/,
+  };
+
+  const items = text
+    .split(separators[splitMode] || separators.lines)
+    .map((entry) => entry.trim())
+    .filter(Boolean);
 
   return items.map((item, index) => ({
     id: `${index}-${item}`,

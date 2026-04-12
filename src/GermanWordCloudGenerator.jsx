@@ -16,15 +16,12 @@ export default function GermanWordCloudGenerator() {
   const [colorCount, setColorCount] = useState(5);
   const [background, setBackground] = useState(DEFAULT_BACKGROUND);
   const [seed, setSeed] = useState(7);
-  const [splitByLineOnly, setSplitByLineOnly] = useState(true);
+  const [splitMode, setSplitMode] = useState("lines");
   const [error, setError] = useState("");
   const stageRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  const words = useMemo(
-    () => parseInput(inputText, splitByLineOnly),
-    [inputText, splitByLineOnly]
-  );
+  const words = useMemo(() => parseInput(inputText, splitMode), [inputText, splitMode]);
 
   const selectedColors = useMemo(() => selectColors(BASE_COLORS, colorCount), [colorCount]);
 
@@ -96,8 +93,8 @@ export default function GermanWordCloudGenerator() {
           onCanvasHeightChange={handleCanvasHeightChange}
           background={background}
           onBackgroundChange={setBackground}
-          splitByLineOnly={splitByLineOnly}
-          onSplitByLineOnlyChange={setSplitByLineOnly}
+          splitMode={splitMode}
+          onSplitModeChange={setSplitMode}
         />
 
         <PreviewPanel
