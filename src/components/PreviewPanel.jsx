@@ -55,7 +55,6 @@ export default function PreviewPanel({
             {color}
           </div>
         ))}
-        <div className="chip">{wordCount} Einträge</div>
       </div>
     </section>
   );
