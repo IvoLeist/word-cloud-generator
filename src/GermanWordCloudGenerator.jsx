@@ -20,6 +20,7 @@ export default function GermanWordCloudGenerator() {
   const [splitMode, setSplitMode] = useState("lines");
   const [error, setError] = useState("");
   const [customColorsText, setCustomColorsText] = useState("");
+  const [wordColorOverrides, setWordColorOverrides] = useState({});
   const stageRef = useRef(null);
   const fileInputRef = useRef(null);
   const colorFileInputRef = useRef(null);
@@ -55,6 +56,26 @@ export default function GermanWordCloudGenerator() {
     });
   }, [words, canvasWidth, canvasHeight, fontSize, gap, selectedColors, seed]);
 
+  useEffect(() => {
+    const validWordIds = new Set(words.map((word) => word.id));
+    setWordColorOverrides((current) => {
+      const next = Object.fromEntries(
+        Object.entries(current).filter(([wordId]) => validWordIds.has(wordId))
+      );
+
+      return Object.keys(next).length === Object.keys(current).length ? current : next;
+    });
+  }, [words]);
+
+  const displayedPlacements = useMemo(
+    () =>
+      placements.map((placement) => ({
+        ...placement,
+        color: wordColorOverrides[placement.id] ?? placement.color,
+      })),
+    [placements, wordColorOverrides]
+  );
+
   const regenerate = () => setSeed((s) => s + 1);
 
   const downloadImage = (format) =>
@@ -62,10 +83,17 @@ export default function GermanWordCloudGenerator() {
       canvasWidth,
       canvasHeight,
       background,
-      placements,
+      placements: displayedPlacements,
       fontSize,
       format,
     });
+
+  const handleWordColorChange = (wordId, color) => {
+    setWordColorOverrides((current) => ({
+      ...current,
+      [wordId]: color,
+    }));
+  };
 
   const handleCanvasWidthChange = (value) => setCanvasWidth(Number(value) || 1200);
 
@@ -144,11 +172,12 @@ export default function GermanWordCloudGenerator() {
           canvasWidth={canvasWidth}
           canvasHeight={canvasHeight}
           background={background}
-          placements={placements}
+          placements={displayedPlacements}
           fontSize={fontSize}
           selectedColors={selectedColors}
           wordCount={words.length}
           onDownloadImage={downloadImage}
+          onWordColorChange={handleWordColorChange}
         />
       </div>
     </div>

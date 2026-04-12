@@ -105,7 +105,7 @@ export function placeWords({ words, width, height, fontSize, gap, colors, seed }
       const x = centerX + Math.cos(angle) * radius * 8 + jitterX - w / 2;
       const y = centerY + Math.sin(angle) * radius * 6 + jitterY - h / 2;
 
-      const rect = { x, y, w, h, text: word.text };
+      const rect = { id: word.id, x, y, w, h, text: word.text };
 
       if (x < 12 || y < 12 || x + w > width - 12 || y + h > height - 12) {
         continue;
@@ -140,6 +140,7 @@ export function placeWords({ words, width, height, fontSize, gap, colors, seed }
       const color = pickBalancedColor(colors, new Set(), colorUsage, rng);
 
       best = {
+        id: word.id,
         x: 20 + rng() * Math.max(20, width - w - 40),
         y: 20 + rng() * Math.max(20, height - h - 40),
         w,
