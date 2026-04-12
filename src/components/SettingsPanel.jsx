@@ -9,6 +9,7 @@ export default function SettingsPanel({
   error,
   colorCount,
   onColorCountChange,
+  maxColorCount,
   fontSize,
   onFontSizeChange,
   gap,
@@ -21,6 +22,12 @@ export default function SettingsPanel({
   onBackgroundChange,
   splitMode,
   onSplitModeChange,
+  customColorsText,
+  onCustomColorsTextChange,
+  colorFileInputRef,
+  onColorUpload,
+  customColorCount,
+  invalidColorEntries,
 }) {
   return (
     <section className="panel">
@@ -70,11 +77,44 @@ export default function SettingsPanel({
       <SliderField
         id="color-count"
         label="Anzahl Farben"
-        min={2}
-        max={8}
+        min={1}
+        max={maxColorCount}
         value={colorCount}
         onChange={onColorCountChange}
       />
+
+      <label htmlFor="custom-colors">Eigene Farben</label>
+      <textarea
+        id="custom-colors"
+        className="text-input palette-input"
+        value={customColorsText}
+        onChange={(event) => onCustomColorsTextChange(event.target.value)}
+        placeholder="z. B. rot, blue, #ff6600, rgb(34, 139, 34)"
+      />
+
+      <div className="row-wrap">
+        <button type="button" className="secondary" onClick={() => colorFileInputRef.current?.click()}>
+          Farben hochladen
+        </button>
+        <input
+          ref={colorFileInputRef}
+          type="file"
+          accept=".txt,.docx,.doc"
+          style={{ display: "none" }}
+          onChange={onColorUpload}
+        />
+      </div>
+
+      <small>
+        Unterstützt Farbwerte als englische oder deutsche Namen sowie Hex- und RGB-Codes.
+      </small>
+
+      {invalidColorEntries.length > 0 && (
+        <div className="error-box">
+          Nicht erkannt: {invalidColorEntries.slice(0, 6).join(", ")}
+          {invalidColorEntries.length > 6 ? " ..." : ""}
+        </div>
+      )}
 
       <SliderField
         id="font-size"

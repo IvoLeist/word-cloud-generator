@@ -1,11 +1,12 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import HeaderSummary from "./components/HeaderSummary";
 import PreviewPanel from "./components/PreviewPanel";
 import SettingsPanel from "./components/SettingsPanel";
 import { DEFAULT_BACKGROUND, DEFAULT_TEXT, BASE_COLORS } from "./utils/constants";
+import { parseCustomColorList, selectColors } from "./utils/colorPalette";
 import { downloadWordCloudImage } from "./utils/exportImage";
 import { readUploadedFile } from "./utils/fileUpload";
-import { parseInput, placeWords, selectColors } from "./utils/wordCloud";
+import { parseInput, placeWords } from "./utils/wordCloud";
 
 export default function GermanWordCloudGenerator() {
   const [inputText, setInputText] = useState(DEFAULT_TEXT);
@@ -18,12 +19,29 @@ export default function GermanWordCloudGenerator() {
   const [seed, setSeed] = useState(7);
   const [splitMode, setSplitMode] = useState("lines");
   const [error, setError] = useState("");
+  const [customColorsText, setCustomColorsText] = useState("");
   const stageRef = useRef(null);
   const fileInputRef = useRef(null);
+  const colorFileInputRef = useRef(null);
 
   const words = useMemo(() => parseInput(inputText, splitMode), [inputText, splitMode]);
+  const customColorResult = useMemo(
+    () => parseCustomColorList(customColorsText),
+    [customColorsText]
+  );
+  const availablePalette = customColorResult.colors.length
+    ? customColorResult.colors
+    : BASE_COLORS;
+  const maxColorCount = availablePalette.length;
 
-  const selectedColors = useMemo(() => selectColors(BASE_COLORS, colorCount), [colorCount]);
+  useEffect(() => {
+    setColorCount((current) => Math.max(1, Math.min(current, maxColorCount)));
+  }, [maxColorCount]);
+
+  const selectedColors = useMemo(
+    () => selectColors(availablePalette, colorCount),
+    [availablePalette, colorCount]
+  );
 
   const placements = useMemo(() => {
     return placeWords({
@@ -65,6 +83,23 @@ export default function GermanWordCloudGenerator() {
     }
   };
 
+  const handleColorUpload = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setError("");
+
+    try {
+      const text = await readUploadedFile(file);
+      setCustomColorsText((currentText) =>
+        currentText.trim() ? `${currentText}\n${text}` : text
+      );
+    } catch (e) {
+      setError(e.message || "Farbliste konnte nicht gelesen werden.");
+    } finally {
+      event.target.value = "";
+    }
+  };
+
   return (
     <div className="app-shell">
       <HeaderSummary
@@ -83,6 +118,7 @@ export default function GermanWordCloudGenerator() {
           error={error}
           colorCount={colorCount}
           onColorCountChange={setColorCount}
+          maxColorCount={maxColorCount}
           fontSize={fontSize}
           onFontSizeChange={setFontSize}
           gap={gap}
@@ -95,6 +131,12 @@ export default function GermanWordCloudGenerator() {
           onBackgroundChange={setBackground}
           splitMode={splitMode}
           onSplitModeChange={setSplitMode}
+          customColorsText={customColorsText}
+          onCustomColorsTextChange={setCustomColorsText}
+          colorFileInputRef={colorFileInputRef}
+          onColorUpload={handleColorUpload}
+          customColorCount={customColorResult.colors.length}
+          invalidColorEntries={customColorResult.invalidEntries}
         />
 
         <PreviewPanel

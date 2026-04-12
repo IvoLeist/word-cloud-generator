@@ -62,10 +62,6 @@ export function parseInput(text, splitMode) {
   }));
 }
 
-export function selectColors(baseColors, colorCount) {
-  return baseColors.slice(0, Math.max(2, Math.min(colorCount, baseColors.length)));
-}
-
 function pickBalancedColor(colors, forbidden, colorUsage, rng) {
   const allowedColors = colors.filter((color) => !forbidden.has(color));
   const candidateColors = allowedColors.length ? allowedColors : colors;
