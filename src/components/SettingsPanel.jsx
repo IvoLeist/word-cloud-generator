@@ -53,7 +53,7 @@ export default function SettingsPanel({
           onChange={onUpload}
         />
         <button type="button" className="secondary" onClick={onRegenerate}>
-          Neu anordnen
+          Generiere neu
         </button>
       </div>
 
