@@ -20,12 +20,21 @@ export default function GermanWordCloudGenerator() {
   const [splitMode, setSplitMode] = useState("lines");
   const [error, setError] = useState("");
   const [customColorsText, setCustomColorsText] = useState("");
+  const [wordTextOverrides, setWordTextOverrides] = useState({});
   const [wordColorOverrides, setWordColorOverrides] = useState({});
   const stageRef = useRef(null);
   const fileInputRef = useRef(null);
   const colorFileInputRef = useRef(null);
 
   const words = useMemo(() => parseInput(inputText, splitMode), [inputText, splitMode]);
+  const effectiveWords = useMemo(
+    () =>
+      words.map((word) => ({
+        ...word,
+        text: wordTextOverrides[word.id] ?? word.text,
+      })),
+    [words, wordTextOverrides]
+  );
   const customColorResult = useMemo(
     () => parseCustomColorList(customColorsText),
     [customColorsText]
@@ -46,7 +55,7 @@ export default function GermanWordCloudGenerator() {
 
   const placements = useMemo(() => {
     return placeWords({
-      words,
+      words: effectiveWords,
       width: canvasWidth,
       height: canvasHeight,
       fontSize,
@@ -54,10 +63,17 @@ export default function GermanWordCloudGenerator() {
       colors: selectedColors,
       seed,
     });
-  }, [words, canvasWidth, canvasHeight, fontSize, gap, selectedColors, seed]);
+  }, [effectiveWords, canvasWidth, canvasHeight, fontSize, gap, selectedColors, seed]);
 
   useEffect(() => {
     const validWordIds = new Set(words.map((word) => word.id));
+    setWordTextOverrides((current) => {
+      const next = Object.fromEntries(
+        Object.entries(current).filter(([wordId]) => validWordIds.has(wordId))
+      );
+
+      return Object.keys(next).length === Object.keys(current).length ? current : next;
+    });
     setWordColorOverrides((current) => {
       const next = Object.fromEntries(
         Object.entries(current).filter(([wordId]) => validWordIds.has(wordId))
@@ -93,6 +109,24 @@ export default function GermanWordCloudGenerator() {
       ...current,
       [wordId]: color,
     }));
+  };
+
+  const handleWordTextChange = (wordId, text) => {
+    setWordTextOverrides((current) => {
+      const baseWord = words.find((word) => word.id === wordId);
+      if (!baseWord) return current;
+
+      const trimmedText = text.trim();
+      if (!trimmedText || trimmedText === baseWord.text) {
+        const { [wordId]: _removed, ...rest } = current;
+        return rest;
+      }
+
+      return {
+        ...current,
+        [wordId]: trimmedText,
+      };
+    });
   };
 
   const handleCanvasWidthChange = (value) => setCanvasWidth(Number(value) || 1200);
@@ -179,6 +213,7 @@ export default function GermanWordCloudGenerator() {
           wordCount={words.length}
           onDownloadImage={downloadImage}
           onWordColorChange={handleWordColorChange}
+          onWordTextChange={handleWordTextChange}
         />
       </div>
     </div>

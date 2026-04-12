@@ -57,7 +57,7 @@ export function parseInput(text, splitMode) {
     .filter(Boolean);
 
   return items.map((item, index) => ({
-    id: `${index}-${item}`,
+    id: String(index),
     text: item,
   }));
 }

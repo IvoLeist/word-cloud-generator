@@ -12,6 +12,7 @@ export default function PreviewPanel({
   wordCount,
   onDownloadImage,
   onWordColorChange,
+  onWordTextChange,
 }) {
   const colorInputRef = useRef(null);
   const [activeWord, setActiveWord] = useState(null);
@@ -38,12 +39,19 @@ export default function PreviewPanel({
     setActiveWord((current) => (current ? { ...current, color } : current));
   };
 
+  const handleTextChange = (event) => {
+    if (!activeWord) return;
+    const nextText = event.target.value;
+    setActiveWord((current) => (current ? { ...current, text: nextText } : current));
+    onWordTextChange(activeWord.id, nextText);
+  };
+
   return (
     <section className="panel">
       <div className="preview-header">
         <div>
           <h2>Vorschau und Download</h2>
-          <p>Klicke auf ein Wort, um dessen Farbe zu ändern.</p>
+          <p>Klicke auf ein Wort, um Text und Farbe zu bearbeiten.</p>
         </div>
         <div className="row-wrap">
           <button type="button" onClick={() => onDownloadImage("png")}>
@@ -101,8 +109,19 @@ export default function PreviewPanel({
         <div className="word-editor">
           <div className="word-editor-header">
             <strong>{activeWord.text}</strong>
-            <span className="word-editor-label">Farbe wählen</span>
+            <span className="word-editor-label">Text und Farbe</span>
           </div>
+
+          <label htmlFor="word-text-input" className="word-editor-input-label">
+            Text
+          </label>
+          <input
+            id="word-text-input"
+            className="word-editor-text-input"
+            type="text"
+            value={activeWord.text}
+            onChange={handleTextChange}
+          />
 
           <div className="word-editor-swatches" aria-label="Verfuegbare Farben">
             {availableColors.map((color) => (
