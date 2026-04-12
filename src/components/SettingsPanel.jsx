@@ -83,38 +83,52 @@ export default function SettingsPanel({
         onChange={onColorCountChange}
       />
 
-      <label htmlFor="custom-colors">Eigene Farben</label>
-      <textarea
-        id="custom-colors"
-        className="text-input palette-input"
-        value={customColorsText}
-        onChange={(event) => onCustomColorsTextChange(event.target.value)}
-        placeholder="z. B. rot, blue, #ff6600, rgb(34, 139, 34)"
-      />
+      <details
+        className="collapsible-panel"
+        open={Boolean(customColorsText.trim()) || invalidColorEntries.length > 0}
+      >
+        <summary className="collapsible-summary">
+          <span>Eigene Farben</span>
+        </summary>
 
-      <div className="row-wrap">
-        <button type="button" className="secondary" onClick={() => colorFileInputRef.current?.click()}>
-          Farben hochladen
-        </button>
-        <input
-          ref={colorFileInputRef}
-          type="file"
-          accept=".txt,.docx,.doc"
-          style={{ display: "none" }}
-          onChange={onColorUpload}
-        />
-      </div>
+        <div className="collapsible-content">
+          <textarea
+            id="custom-colors"
+            className="text-input palette-input"
+            value={customColorsText}
+            onChange={(event) => onCustomColorsTextChange(event.target.value)}
+            placeholder="z. B. rot, blue, #ff6600, rgb(34, 139, 34)"
+          />
 
-      <small>
-        Unterstützt Farbwerte als englische oder deutsche Namen sowie Hex- und RGB-Codes.
-      </small>
+          <div className="row-wrap">
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => colorFileInputRef.current?.click()}
+            >
+              Farben hochladen
+            </button>
+            <input
+              ref={colorFileInputRef}
+              type="file"
+              accept=".txt,.docx,.doc"
+              style={{ display: "none" }}
+              onChange={onColorUpload}
+            />
+          </div>
 
-      {invalidColorEntries.length > 0 && (
-        <div className="error-box">
-          Nicht erkannt: {invalidColorEntries.slice(0, 6).join(", ")}
-          {invalidColorEntries.length > 6 ? " ..." : ""}
+          <small>
+            Unterstützt Farbwerte als englische oder deutsche Namen sowie Hex- und RGB-Codes.
+          </small>
+
+          {invalidColorEntries.length > 0 && (
+            <div className="error-box">
+              Nicht erkannt: {invalidColorEntries.slice(0, 6).join(", ")}
+              {invalidColorEntries.length > 6 ? " ..." : ""}
+            </div>
+          )}
         </div>
-      )}
+      </details>
 
       <SliderField
         id="font-size"
