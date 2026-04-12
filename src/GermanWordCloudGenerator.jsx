@@ -293,10 +293,31 @@ export default function GermanWordCloudGenerator() {
 
   return (
     <div className="app-shell">
-      <h1>German Word Cloud Generator</h1>
-      <p className="subtitle">
-        Gleiche Schriftgröße für alle Wörter, Upload aus .txt/.docx, Export als PNG/JPG.
-      </p>
+      <header className="page-header">
+        <div>
+          <h1>German Word Cloud Generator</h1>
+          <p className="subtitle">
+            Gleiche Schriftgröße für alle Wörter, Upload aus .txt/.docx, Export als PNG/JPG.
+          </p>
+        </div>
+
+        <div className="summary-strip" aria-label="Schnellinfos">
+          <div className="summary-card">
+            <span className="summary-label">Einträge</span>
+            <strong>{words.length}</strong>
+          </div>
+          <div className="summary-card">
+            <span className="summary-label">Format</span>
+            <strong>
+              {canvasWidth} x {canvasHeight}
+            </strong>
+          </div>
+          <div className="summary-card">
+            <span className="summary-label">Export</span>
+            <strong>PNG / JPG</strong>
+          </div>
+        </div>
+      </header>
 
       <div className="layout-grid">
         <section className="panel">
@@ -420,6 +441,12 @@ export default function GermanWordCloudGenerator() {
                 JPG
               </button>
             </div>
+          </div>
+
+          <div className="preview-meta">
+            <span className="preview-badge">Live-Vorschau</span>
+            <span className="preview-badge">Desktop optimiert</span>
+            <span className="preview-badge">{selectedColors.length} Farben aktiv</span>
           </div>
 
           <div className="preview-scroll">
