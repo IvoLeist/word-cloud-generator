@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -8,7 +8,6 @@ import {
   Button,
   Chip,
   FormControl,
-  InputLabel,
   MenuItem,
   Stack,
   TextField,
@@ -18,12 +17,16 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import PaletteIcon from "@mui/icons-material/Palette";
+import CloseIcon from "@mui/icons-material/Close";
 import SliderField from "./SliderField";
 import { splitColorList } from "../utils/colorPalette";
 
 export default function SettingsPanel({
-  inputText,
-  onInputTextChange,
+  words,
+  wordPlacements,
+  onWordTextChange,
+  onWordAdd,
+  onWordRemove,
   fileInputRef,
   onUpload,
   onRegenerate,
@@ -50,7 +53,24 @@ export default function SettingsPanel({
   invalidColorEntries,
 }) {
   const [colorDraft, setColorDraft] = useState("");
+  const [wordDraft, setWordDraft] = useState("");
+  const [editingWordId, setEditingWordId] = useState(null);
+  const [editingWordText, setEditingWordText] = useState("");
   const customColorTokens = useMemo(() => splitColorList(customColorsText), [customColorsText]);
+  const placementColorById = useMemo(
+    () => Object.fromEntries(wordPlacements.map((placement) => [placement.id, placement.color])),
+    [wordPlacements]
+  );
+
+  useEffect(() => {
+    if (!editingWordId) return;
+
+    const editedWord = words.find((word) => word.id === editingWordId);
+    if (!editedWord) {
+      setEditingWordId(null);
+      setEditingWordText("");
+    }
+  }, [editingWordId, words]);
 
   const commitColorDraft = () => {
     const draftTokens = splitColorList(colorDraft);
@@ -67,6 +87,41 @@ export default function SettingsPanel({
     onCustomColorsTextChange(
       customColorTokens.filter((_, index) => index !== indexToRemove).join("\n")
     );
+  };
+
+  const startEditingWord = (word) => {
+    setEditingWordId(word.id);
+    setEditingWordText(word.text);
+  };
+
+  const commitWordEdit = () => {
+    if (!editingWordId) return;
+
+    const nextText = editingWordText.trim();
+    if (!nextText) {
+      onWordRemove(editingWordId);
+    } else {
+      onWordTextChange(editingWordId, nextText);
+    }
+
+    setEditingWordId(null);
+    setEditingWordText("");
+  };
+
+  const cancelWordEdit = () => {
+    setEditingWordId(null);
+    setEditingWordText("");
+  };
+
+  const commitWordDraft = () => {
+    const nextText = wordDraft.trim();
+    if (!nextText) {
+      setWordDraft("");
+      return;
+    }
+
+    onWordAdd(nextText);
+    setWordDraft("");
   };
 
   return (
@@ -92,22 +147,101 @@ export default function SettingsPanel({
         Einstellungen
       </Typography>
 
-      <TextField
-        label="Wörter / Sätze"
-        multiline
-        rows={10}
-        value={inputText}
-        onChange={(event) => onInputTextChange(event.target.value)}
-        placeholder="Wörter oder Sätze hier eingeben, z. B. durch Zeilenumbruch, Komma oder Semikolon getrennt (je nach Einstellung)"
-        sx={{
-          "& .MuiInputBase-root": {
-            alignItems: "flex-start",
-          },
-          "& .MuiInputBase-inputMultiline": {
-            overflowY: "auto !important",
-          },
-        }}
-      />
+      <Stack spacing={1}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+          Wörter / Sätze
+        </Typography>
+        <Box
+          sx={(theme) => ({
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 1,
+            p: 1.5,
+            border: "1px solid",
+            borderColor: "divider",
+            borderRadius: 3,
+            minHeight: 88,
+            alignItems: "center",
+            backgroundColor: theme.palette.background.default,
+          })}
+        >
+          {words.map((word) => {
+            const isEditing = editingWordId === word.id;
+            const pillColor = placementColorById[word.id] ?? "text.primary";
+
+            if (isEditing) {
+              return (
+                <TextField
+                  key={word.id}
+                  autoFocus
+                  size="small"
+                  value={editingWordText}
+                  onChange={(event) => setEditingWordText(event.target.value)}
+                  onBlur={commitWordEdit}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      commitWordEdit();
+                    }
+
+                    if (event.key === "Escape") {
+                      event.preventDefault();
+                      cancelWordEdit();
+                    }
+                  }}
+                  sx={{ minWidth: 140, flexShrink: 0 }}
+                />
+              );
+            }
+
+            return (
+              <Chip
+                key={word.id}
+                label={word.text}
+                onClick={() => startEditingWord(word)}
+                onDelete={() => onWordRemove(word.id)}
+                deleteIcon={<CloseIcon />}
+                sx={{
+                  maxWidth: "100%",
+                  borderRadius: 999,
+                  color: "#ffffff",
+                  backgroundColor: pillColor,
+                  fontWeight: 700,
+                  "& .MuiChip-label": {
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  },
+                  "& .MuiChip-deleteIcon": {
+                    color: "rgba(255,255,255,0.88)",
+                    "&:hover": {
+                      color: "#ffffff",
+                    },
+                  },
+                }}
+              />
+            );
+          })}
+
+          <TextField
+            variant="standard"
+            value={wordDraft}
+            onChange={(event) => setWordDraft(event.target.value)}
+            onBlur={commitWordDraft}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === "Tab") {
+                event.preventDefault();
+                commitWordDraft();
+              }
+            }}
+            placeholder={words.length ? "Weiteres Wort oder Satz" : "Wort oder Satz eingeben"}
+            InputProps={{ disableUnderline: true }}
+            sx={{ flex: 1, minWidth: 180 }}
+          />
+        </Box>
+        <Typography variant="body2" color="text.secondary">
+          Klick auf ein Pill zum Bearbeiten. Mit dem X entfernst du den Eintrag.
+        </Typography>
+      </Stack>
 
       <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
         <Button
