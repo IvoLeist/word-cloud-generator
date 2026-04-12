@@ -37,6 +37,47 @@ const BASE_COLORS = [
   "#be123c",
 ];
 
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function SliderField({ id, label, min, max, step = 1, value, suffix = "", onChange }) {
+  const handleChange = (nextValue) => {
+    const parsed = Number(nextValue);
+    if (Number.isNaN(parsed)) return;
+    onChange(clamp(parsed, min, max));
+  };
+
+  return (
+    <div className="slider-field">
+      <label htmlFor={id}>
+        {label}: {value}
+        {suffix}
+      </label>
+      <div className="slider-input-row">
+        <input
+          id={id}
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => handleChange(e.target.value)}
+        />
+        <input
+          aria-label={`${label} direkt eingeben`}
+          type="number"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => handleChange(e.target.value)}
+        />
+      </div>
+    </div>
+  );
+}
+
 function mulberry32(a) {
   return function () {
     let t = (a += 0x6d2b79f5);
@@ -354,37 +395,33 @@ export default function GermanWordCloudGenerator() {
 
           {error && <div className="error-box">{error}</div>}
 
-          <label htmlFor="color-count">Anzahl Farben: {colorCount}</label>
-          <input
+          <SliderField
             id="color-count"
-            type="range"
-            min="2"
-            max="8"
-            step="1"
+            label="Anzahl Farben"
+            min={2}
+            max={8}
             value={colorCount}
-            onChange={(e) => setColorCount(Number(e.target.value))}
+            onChange={setColorCount}
           />
 
-          <label htmlFor="font-size">Schriftgröße: {fontSize}px</label>
-          <input
+          <SliderField
             id="font-size"
-            type="range"
-            min="20"
-            max="80"
-            step="1"
+            label="Schriftgröße"
+            min={20}
+            max={80}
             value={fontSize}
-            onChange={(e) => setFontSize(Number(e.target.value))}
+            suffix="px"
+            onChange={setFontSize}
           />
 
-          <label htmlFor="gap">Abstand zwischen Wörtern: {gap}px</label>
-          <input
+          <SliderField
             id="gap"
-            type="range"
-            min="0"
-            max="40"
-            step="1"
+            label="Abstand zwischen Wörtern"
+            min={0}
+            max={40}
             value={gap}
-            onChange={(e) => setGap(Number(e.target.value))}
+            suffix="px"
+            onChange={setGap}
           />
 
           <div className="size-grid">
@@ -441,12 +478,6 @@ export default function GermanWordCloudGenerator() {
                 JPG
               </button>
             </div>
-          </div>
-
-          <div className="preview-meta">
-            <span className="preview-badge">Live-Vorschau</span>
-            <span className="preview-badge">Desktop optimiert</span>
-            <span className="preview-badge">{selectedColors.length} Farben aktiv</span>
           </div>
 
           <div className="preview-scroll">

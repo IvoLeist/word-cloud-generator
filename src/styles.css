@@ -180,6 +180,30 @@ input[type="range"] {
   accent-color: #0b5cab;
 }
 
+.slider-field {
+  margin-top: 12px;
+}
+
+.slider-field label {
+  margin-top: 0;
+}
+
+.slider-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 92px;
+  gap: 12px;
+  align-items: center;
+}
+
+.slider-input-row input[type="range"] {
+  margin-top: 0;
+}
+
+.slider-input-row input[type="number"] {
+  margin-top: 0;
+  text-align: right;
+}
+
 input[type="color"] {
   height: 46px;
   padding: 6px;
@@ -401,6 +425,11 @@ button.secondary {
 @media (max-width: 640px) {
   .size-grid {
     grid-template-columns: 1fr;
+  }
+
+  .slider-input-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 
   .chip {
