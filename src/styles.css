@@ -177,10 +177,6 @@ input[type="color"]:focus {
   resize: vertical;
 }
 
-.palette-input {
-  min-height: 120px;
-}
-
 .collapsible-panel {
   margin-top: 12px;
   border: 1px solid #d7dfeb;
@@ -224,6 +220,79 @@ input[type="color"]:focus {
 
 .collapsible-content {
   padding: 0 16px 16px;
+}
+
+.pill-input-shell {
+  margin-top: 8px;
+}
+
+.pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  min-height: 54px;
+  border: 1px solid #c7d2e0;
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.92);
+  transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+
+.pill-list:focus-within {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.16);
+}
+
+.pill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.pill-chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pill-chip-remove {
+  min-width: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 16px;
+  line-height: 1;
+  box-shadow: none;
+  transform: none;
+}
+
+.pill-chip-remove:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.pill-input {
+  flex: 1 1 180px;
+  min-width: 180px;
+  border: 0;
+  padding: 6px 0;
+  font-size: 14px;
+  background: transparent;
+  color: #1f2937;
+}
+
+.pill-input:focus {
+  outline: none;
 }
 
 input[type="range"] {

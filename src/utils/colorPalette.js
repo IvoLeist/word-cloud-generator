@@ -33,7 +33,7 @@ const GERMAN_COLOR_ALIASES = {
   beige: "beige",
 };
 
-function splitColorList(input) {
+export function splitColorList(input) {
   const rgbMatches = [];
   const protectedInput = input.replace(
     /rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+(?:\s*,\s*(?:0|1|0?\.\d+))?\s*\)/gi,

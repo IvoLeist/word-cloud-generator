@@ -1,3 +1,5 @@
+import { useMemo, useState } from "react";
+import { splitColorList } from "../utils/colorPalette";
 import SliderField from "./SliderField";
 
 export default function SettingsPanel({
@@ -29,6 +31,27 @@ export default function SettingsPanel({
   customColorCount,
   invalidColorEntries,
 }) {
+  const [colorDraft, setColorDraft] = useState("");
+  const customColorTokens = useMemo(() => splitColorList(customColorsText), [customColorsText]);
+
+  const commitColorDraft = () => {
+    const draftTokens = splitColorList(colorDraft);
+    if (!draftTokens.length) {
+      setColorDraft("");
+      return;
+    }
+
+    const nextTokens = [...customColorTokens, ...draftTokens];
+    onCustomColorsTextChange(nextTokens.join("\n"));
+    setColorDraft("");
+  };
+
+  const removeColorToken = (indexToRemove) => {
+    onCustomColorsTextChange(
+      customColorTokens.filter((_, index) => index !== indexToRemove).join("\n")
+    );
+  };
+
   return (
     <section className="panel">
       <h2>Einstellungen</h2>
@@ -92,13 +115,47 @@ export default function SettingsPanel({
         </summary>
 
         <div className="collapsible-content">
-          <textarea
-            id="custom-colors"
-            className="text-input palette-input"
-            value={customColorsText}
-            onChange={(event) => onCustomColorsTextChange(event.target.value)}
-            placeholder="z. B. rot, blue, #ff6600, rgb(34, 139, 34)"
-          />
+          <label htmlFor="custom-color-draft">Eigene Farben</label>
+          <div className="pill-input-shell">
+            <div className="pill-list" aria-label="Eigene Farben Liste">
+              {customColorTokens.map((token, index) => (
+                <span key={`${token}-${index}`} className="pill-chip">
+                  <span className="pill-chip-label">{token}</span>
+                  <button
+                    type="button"
+                    className="pill-chip-remove"
+                    onClick={() => removeColorToken(index)}
+                    aria-label={`${token} entfernen`}
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+              <input
+                id="custom-color-draft"
+                className="pill-input"
+                value={colorDraft}
+                onChange={(event) => setColorDraft(event.target.value)}
+                onBlur={commitColorDraft}
+                onKeyDown={(event) => {
+                  if (
+                    event.key === "Enter" ||
+                    event.key === "," ||
+                    event.key === ";" ||
+                    event.key === "Tab"
+                  ) {
+                    event.preventDefault();
+                    commitColorDraft();
+                  }
+                }}
+                placeholder={
+                  customColorTokens.length
+                    ? "Weitere Farbe eingeben"
+                    : "z. B. rot, blue, #ff6600, rgb(34, 139, 34)"
+                }
+              />
+            </div>
+          </div>
 
           <div className="row-wrap">
             <button
