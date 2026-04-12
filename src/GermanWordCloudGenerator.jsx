@@ -173,6 +173,7 @@ export default function GermanWordCloudGenerator() {
           canvasHeight={canvasHeight}
           background={background}
           placements={displayedPlacements}
+          availableColors={availablePalette}
           fontSize={fontSize}
           selectedColors={selectedColors}
           wordCount={words.length}

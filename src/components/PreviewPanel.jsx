@@ -6,6 +6,7 @@ export default function PreviewPanel({
   canvasHeight,
   background,
   placements,
+  availableColors,
   fontSize,
   selectedColors,
   wordCount,
@@ -32,12 +33,18 @@ export default function PreviewPanel({
     );
   };
 
+  const applyPaletteColor = (color) => {
+    if (!activeWord) return;
+    onWordColorChange(activeWord.id, color);
+    setActiveWord((current) => (current ? { ...current, color } : current));
+  };
+
   return (
     <section className="panel">
       <div className="preview-header">
         <div>
           <h2>Vorschau und Download</h2>
-          <p>Wort anklicken, um seine Farbe manuell zu ändern.</p>
+          <p>Wort anklicken, um seine Farbe aus der aktiven Palette oder manuell zu ändern.</p>
         </div>
         <div className="row-wrap">
           <button type="button" onClick={() => onDownloadImage("png")}>
@@ -90,6 +97,39 @@ export default function PreviewPanel({
           ))}
         </div>
       </div>
+
+      {activeWord && (
+        <div className="word-editor">
+          <div className="word-editor-header">
+            <strong>{activeWord.text}</strong>
+            <span className="word-editor-label">Farbe waehlen</span>
+          </div>
+
+          <div className="word-editor-swatches" aria-label="Verfuegbare Farben">
+            {availableColors.map((color) => (
+              <button
+                key={color}
+                type="button"
+                className={`swatch-button${activeWord.color === color ? " is-active" : ""}`}
+                style={{ backgroundColor: color }}
+                onClick={() => applyPaletteColor(color)}
+                aria-label={`Farbe ${color} verwenden`}
+                title={color}
+              />
+            ))}
+          </div>
+
+          <div className="row-wrap word-editor-actions">
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => colorInputRef.current?.click()}
+            >
+              Eigene Farbe waehlen
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="chips-row">
         {selectedColors.map((color) => (
