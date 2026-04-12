@@ -19,7 +19,7 @@ function joinWordsForInput(words, splitMode) {
   return words.map((word) => word.text).join(separators[splitMode] || separators.lines);
 }
 
-export default function GermanWordCloudGenerator() {
+export default function GermanWordCloudGenerator({ colorMode, onToggleColorMode }) {
   const [inputText, setInputText] = useState(DEFAULT_TEXT);
   const [canvasWidth, setCanvasWidth] = useState(1200);
   const [canvasHeight, setCanvasHeight] = useState(1200);
@@ -162,6 +162,8 @@ export default function GermanWordCloudGenerator() {
           wordCount={words.length}
           canvasWidth={canvasWidth}
           canvasHeight={canvasHeight}
+          colorMode={colorMode}
+          onToggleColorMode={onToggleColorMode}
         />
 
         <Box
