@@ -102,7 +102,7 @@ export default function PreviewPanel({
         <div className="word-editor">
           <div className="word-editor-header">
             <strong>{activeWord.text}</strong>
-            <span className="word-editor-label">Farbe waehlen</span>
+            <span className="word-editor-label">Farbe wählen</span>
           </div>
 
           <div className="word-editor-swatches" aria-label="Verfuegbare Farben">
@@ -125,7 +125,7 @@ export default function PreviewPanel({
               className="secondary"
               onClick={() => colorInputRef.current?.click()}
             >
-              Eigene Farbe waehlen
+              Eigene Farbe whälen
             </button>
           </div>
         </div>
