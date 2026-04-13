@@ -203,7 +203,7 @@ export default function GermanWordCloudGenerator({ colorMode, onToggleColorMode 
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: { xs: "1fr", xl: "420px minmax(0, 1fr)" },
+            gridTemplateColumns: { xs: "1fr", xl: "450px minmax(0, 1fr)" },
             gap: 3.5,
             alignItems: "start",
           }}

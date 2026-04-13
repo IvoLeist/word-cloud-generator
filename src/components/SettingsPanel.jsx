@@ -400,24 +400,31 @@ export default function SettingsPanel({
         </AccordionDetails>
       </Accordion>
 
-      <FontSizeSelector
-        id="font-size"
-        label="Schriftgröße"
-        min={8}
-        max={96}
-        value={fontSize}
-        onChange={onFontSizeChange}
-      />
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <FontSizeSelector
+            id="font-size"
+            label="Schriftgröße"
+            min={8}
+            max={96}
+            value={fontSize}
+            onChange={onFontSizeChange}
+            fullWidth
+          />
+        </Box>
 
-      <SliderField
-        id="gap"
-        label="Abstand"
-        min={0}
-        max={40}
-        value={gap}
-        suffix="px"
-        onChange={onGapChange}
-      />
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <FontSizeSelector
+            id="gap"
+            label="Abstand"
+            min={0}
+            max={40}
+            value={gap}
+            onChange={onGapChange}
+            fullWidth
+          />
+        </Box>
+      </Stack>
 
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
         <TextField

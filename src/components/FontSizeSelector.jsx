@@ -25,6 +25,7 @@ export default function FontSizeSelector({
   step = 1,
   value,
   onChange,
+  fullWidth = false,
 }) {
   const [draftValue, setDraftValue] = useState(String(value));
   const [menuOpen, setMenuOpen] = useState(false);
@@ -56,7 +57,7 @@ export default function FontSizeSelector({
   };
 
   return (
-    <Stack spacing={1.5}>
+    <Stack spacing={1.5} sx={{ width: fullWidth ? "100%" : "auto" }}>
       <Typography component="label" htmlFor={id} variant="subtitle2" sx={{ fontWeight: 700 }}>
         {label}
       </Typography>
@@ -68,7 +69,7 @@ export default function FontSizeSelector({
             sx={(theme) => ({
               display: "flex",
               alignItems: "center",
-              width: "fit-content",
+              width: fullWidth ? "100%" : "fit-content",
               minWidth: 188,
               overflow: "hidden",
               borderRadius: 2.5,
