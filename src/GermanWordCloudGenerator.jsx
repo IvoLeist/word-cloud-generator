@@ -5,7 +5,7 @@ import PreviewPanel from "./components/PreviewPanel";
 import SettingsPanel from "./components/SettingsPanel";
 import { DEFAULT_BACKGROUND, DEFAULT_TEXT, BASE_COLORS } from "./utils/constants";
 import { parseCustomColorList, selectColors } from "./utils/colorPalette";
-import { downloadWordCloudImage } from "./utils/exportImage";
+import { downloadWordCloudDocx, downloadWordCloudImage } from "./utils/exportImage";
 import { readUploadedFile } from "./utils/fileUpload";
 import { parseInput, placeWords } from "./utils/wordCloud";
 
@@ -102,6 +102,15 @@ export default function GermanWordCloudGenerator({ colorMode, onToggleColorMode 
       placements: displayedPlacements,
       fontSize,
       format,
+    });
+
+  const downloadDocx = () =>
+    downloadWordCloudDocx({
+      canvasWidth,
+      canvasHeight,
+      background,
+      placements: displayedPlacements,
+      fontSize,
     });
 
   const handleWordColorChange = (wordId, color) => {
@@ -217,6 +226,7 @@ export default function GermanWordCloudGenerator({ colorMode, onToggleColorMode 
             selectedColors={selectedColors}
             wordCount={words.length}
             onDownloadImage={downloadImage}
+            onDownloadDocx={downloadDocx}
             onWordColorChange={handleWordColorChange}
             onWordTextChange={handleWordTextChange}
           />
