@@ -156,12 +156,15 @@ export default function SettingsPanel({
           sx={(theme) => ({
             display: "flex",
             flexWrap: "wrap",
+            alignContent: "flex-start",
             gap: 1,
             p: 1.5,
             border: "1px solid",
             borderColor: "divider",
             borderRadius: 3,
             minHeight: 88,
+            maxHeight: 220,
+            overflowY: "auto",
             alignItems: "center",
             backgroundColor: theme.palette.background.default,
           })}
@@ -240,7 +243,7 @@ export default function SettingsPanel({
           />
         </Box>
         <Typography variant="body2" color="text.secondary">
-          Klick auf ein Pill zum Bearbeiten. Mit dem X entfernst du den Eintrag.
+          Mit Klicken kann der Text bearbeitet werden. Entferne ein Wort/Satz über das X.
         </Typography>
       </Stack>
 
@@ -408,7 +411,7 @@ export default function SettingsPanel({
 
       <SliderField
         id="gap"
-        label="Abstand zwischen Wörtern"
+        label="Abstand"
         min={0}
         max={40}
         value={gap}
