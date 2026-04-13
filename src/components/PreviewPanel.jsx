@@ -20,6 +20,7 @@ export default function PreviewPanel({
   fontSize,
   selectedColors,
   onDownloadImage,
+  onDownloadDocx,
   onWordColorChange,
   onWordTextChange,
 }) {
@@ -95,6 +96,9 @@ export default function PreviewPanel({
               </Button>
               <Button variant="outlined" onClick={() => onDownloadImage("jpg")}>
                 JPG
+              </Button>
+              <Button variant="outlined" onClick={onDownloadDocx}>
+                DOCX
               </Button>
             </Stack>
           </Stack>
