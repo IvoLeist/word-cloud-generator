@@ -18,6 +18,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import PaletteIcon from "@mui/icons-material/Palette";
 import CloseIcon from "@mui/icons-material/Close";
+import FontSizeSelector from "./FontSizeSelector";
 import SliderField from "./SliderField";
 import { splitColorList } from "../utils/colorPalette";
 
@@ -396,13 +397,12 @@ export default function SettingsPanel({
         </AccordionDetails>
       </Accordion>
 
-      <SliderField
+      <FontSizeSelector
         id="font-size"
         label="Schriftgröße"
         min={8}
         max={96}
         value={fontSize}
-        suffix="px"
         onChange={onFontSizeChange}
       />
 
