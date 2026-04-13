@@ -400,57 +400,76 @@ export default function SettingsPanel({
         </AccordionDetails>
       </Accordion>
 
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <FontSizeSelector
-            id="font-size"
-            label="Schriftgröße"
-            min={8}
-            max={96}
-            value={fontSize}
-            onChange={onFontSizeChange}
-            fullWidth
-          />
-        </Box>
+      <Accordion
+        disableGutters
+        sx={(theme) => ({
+          borderRadius: 3,
+          border: "1px solid",
+          borderColor: "divider",
+          backgroundColor: theme.palette.background.paper,
+          "&:before": { display: "none" },
+          overflow: "hidden",
+        })}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography sx={{ fontWeight: 700 }}>Layout und Hintergrund</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Stack spacing={2}>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <FontSizeSelector
+                  id="font-size"
+                  label="Schriftgröße"
+                  min={8}
+                  max={96}
+                  value={fontSize}
+                  onChange={onFontSizeChange}
+                  fullWidth
+                />
+              </Box>
 
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <FontSizeSelector
-            id="gap"
-            label="Abstand"
-            min={0}
-            max={40}
-            value={gap}
-            onChange={onGapChange}
-            fullWidth
-          />
-        </Box>
-      </Stack>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <FontSizeSelector
+                  id="gap"
+                  label="Abstand"
+                  min={0}
+                  max={40}
+                  value={gap}
+                  onChange={onGapChange}
+                  fullWidth
+                />
+              </Box>
+            </Stack>
 
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-        <TextField
-          fullWidth
-          label="Breite"
-          type="number"
-          value={canvasWidth}
-          onChange={(event) => onCanvasWidthChange(event.target.value)}
-        />
-        <TextField
-          fullWidth
-          label="Höhe"
-          type="number"
-          value={canvasHeight}
-          onChange={(event) => onCanvasHeightChange(event.target.value)}
-        />
-      </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextField
+                fullWidth
+                label="Breite"
+                type="number"
+                value={canvasWidth}
+                onChange={(event) => onCanvasWidthChange(event.target.value)}
+              />
+              <TextField
+                fullWidth
+                label="Höhe"
+                type="number"
+                value={canvasHeight}
+                onChange={(event) => onCanvasHeightChange(event.target.value)}
+              />
+            </Stack>
 
-      <TextField
-        label="Hintergrundfarbe"
-        type="color"
-        value={background}
-        onChange={(event) => onBackgroundChange(event.target.value)}
-        InputLabelProps={{ shrink: true }}
-        sx={{ maxWidth: 200 }}
-      />
+            <TextField
+              label="Hintergrundfarbe"
+              type="color"
+              value={background}
+              onChange={(event) => onBackgroundChange(event.target.value)}
+              InputLabelProps={{ shrink: true }}
+              sx={{ maxWidth: 200 }}
+            />
+          </Stack>
+        </AccordionDetails>
+      </Accordion>
     </Stack>
   );
 }
