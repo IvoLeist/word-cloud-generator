@@ -131,6 +131,31 @@ export default function GermanWordCloudGenerator({ colorMode, onToggleColorMode 
     });
   };
 
+  const handleWordAdd = (text) => {
+    setInputText((currentInputText) => {
+      const currentWords = parseInput(currentInputText, splitMode);
+      return joinWordsForInput([...currentWords, { id: String(currentWords.length), text }], splitMode);
+    });
+  };
+
+  const handleWordRemove = (wordId) => {
+    setInputText((currentInputText) => {
+      const currentWords = parseInput(currentInputText, splitMode);
+      return joinWordsForInput(
+        currentWords.filter((word) => word.id !== wordId),
+        splitMode
+      );
+    });
+
+    setWordColorOverrides((current) => {
+      if (!(wordId in current)) return current;
+
+      const next = { ...current };
+      delete next[wordId];
+      return next;
+    });
+  };
+
   const handleCanvasWidthChange = (value) => setCanvasWidth(Number(value) || 1200);
 
   const handleCanvasHeightChange = (value) => setCanvasHeight(Number(value) || 1200);
@@ -185,8 +210,11 @@ export default function GermanWordCloudGenerator({ colorMode, onToggleColorMode 
         >
           <Box sx={{ position: { xl: "sticky" }, top: { xl: 20 } }}>
             <SettingsPanel
-              inputText={inputText}
-              onInputTextChange={setInputText}
+              words={words}
+              wordPlacements={displayedPlacements}
+              onWordTextChange={handleWordTextChange}
+              onWordAdd={handleWordAdd}
+              onWordRemove={handleWordRemove}
               fileInputRef={fileInputRef}
               onUpload={handleUpload}
               onRegenerate={regenerate}
