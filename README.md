@@ -1,5 +1,7 @@
 # German Word Cloud Generator
 
+Live here: https://ivoleist.github.io/word-cloud-generator
+
 A React + Vite app for generating German word clouds from typed text or uploaded `.txt` / `.docx` files.
 
 ## Requirements
