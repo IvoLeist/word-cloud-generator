@@ -1,18 +1,22 @@
 SHELL := /bin/sh
 
-.PHONY: help worktrees dev
+.PHONY: help worktrees tree-dev
 
 help:
 	@printf '%s\n' \
 		'Available targets:' \
+		'  make dev		     Run npm run dev for the main branch' \
 		'  make worktrees            List git worktrees for this repo' \
-		'  make dev                  Pick a worktree branch and run npm run dev' \
-		'  make dev BRANCH=<name>    Run npm run dev for a specific branch'
+		'  make tree-dev                  Pick a worktree branch and run npm run dev' \
+		'  make tree-dev BRANCH=<name>    Run npm run dev for a specific branch'
+
+dev:
+	@npm run dev
 
 worktrees:
 	@git worktree list
 
-dev:
+tree-dev:
 	@set -eu; \
 	data_file="$$(mktemp)"; \
 	trap 'rm -f "$$data_file"' EXIT HUP INT TERM; \

@@ -5,6 +5,7 @@ import {
   IconButton,
   InputBase,
   MenuItem,
+  MenuList,
   Paper,
   Stack,
   Typography,
@@ -163,23 +164,24 @@ export default function FontSizeSelector({
                 zIndex: 10,
                 width: 96,
                 maxHeight: 240,
-                overflowY: "auto",
                 borderRadius: 2,
               }}
             >
-              {presetValues.map((preset) => (
-                <MenuItem
-                  key={preset}
-                  selected={preset === value}
-                  onClick={() => {
-                    commitValue(preset);
-                    setMenuOpen(false);
-                  }}
-                  dense
-                >
-                  {preset}
-                </MenuItem>
-              ))}
+              <MenuList dense sx={{ maxHeight: 240, overflowY: "auto", py: 0.5 }}>
+                {presetValues.map((preset) => (
+                  <MenuItem
+                    key={preset}
+                    selected={preset === value}
+                    onClick={() => {
+                      commitValue(preset);
+                      setMenuOpen(false);
+                    }}
+                    dense
+                  >
+                    {preset}
+                  </MenuItem>
+                ))}
+              </MenuList>
             </Paper>
           )}
         </Box>
